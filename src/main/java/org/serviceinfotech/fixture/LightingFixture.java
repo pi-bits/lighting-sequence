@@ -7,6 +7,7 @@ import org.serviceinfotech.model.State;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class LightingFixture {
 
     private List<LightBulb> lightBulbs;
@@ -29,12 +30,22 @@ public class LightingFixture {
     }
 
     private void toggleLightSwitch(Colour colour, State state) {
-        lightBulbs.stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).forEach(lightBulb -> {
-            lightBulb.setState(state);
-        });
+
+        for (int i = 0; i < lightBulbs.size(); i++) {
+            LightBulb lightBulb = lightBulbs.get(i);
+            if (lightBulb.getColour().equals(colour)) {
+                lightBulb.setState(state);
+                printMessage(i, lightBulb);
+            }
+        }
+
     }
 
     public List<LightBulb> getLightBulbsByColour(Colour colour) {
         return lightBulbs.stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).collect(Collectors.toList());
+    }
+
+    private static void printMessage(int lightNumber, LightBulb lightBulb) {
+        System.out.println("Light " + (lightNumber + 1) + "\t" + lightBulb.getColour().name() + "\t" + lightBulb.getState().name());
     }
 }

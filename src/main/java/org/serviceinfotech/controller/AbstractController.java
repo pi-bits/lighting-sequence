@@ -19,16 +19,12 @@ public abstract class AbstractController {
         for (int i = 0; i < lightBulbs.size(); i++) {
             LightBulb lightBulb = lightBulbs.get(i);
             lightBulb.setState(State.ON);
-            printMessage(i, lightBulb);
             Thread.sleep(500);
             lightBulb.setState(State.OFF);
-            printMessage(i, lightBulb);
         }
     }
 
-    private void printMessage(int lightNumber, LightBulb lightBulb) {
-        System.out.println("Light " + (lightNumber + 1) + "\t" + lightBulb.getColour().name() + "\t" + lightBulb.getState().name());
-    }
+
 
     protected  void changeColours() throws InterruptedException {
         //Iterate through all the available colours.
