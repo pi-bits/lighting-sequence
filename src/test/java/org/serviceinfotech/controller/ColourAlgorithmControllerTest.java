@@ -2,6 +2,7 @@ package org.serviceinfotech.controller;
 
 import org.hamcrest.core.Is;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.serviceinfotech.fixture.LightingFixture;
 import org.serviceinfotech.model.Colour;
@@ -25,18 +26,15 @@ public class ColourAlgorithmControllerTest {
         ExecutorService taskExecutor = Executors.newFixedThreadPool(NUMBER_OF_LIGHTS);
         taskExecutor.submit(controller);
 
-        lightingFixture.getLightBulbs().stream()
-                .filter(lightBulb -> lightBulb.getColour().equals(Colour.valueOf("RED")))
-                .forEach(lightBulb -> {
-
-                    Assert.assertThat(lightBulb.getState(), Is.is(State.ON));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Assert.assertThat(lightBulb.getState(), Is.is(State.OFF));
-                });
+        for (int i = 0; i < Colour.values().length; i++) {
+            lightingFixture.getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
+                Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.ON));
+            });
+            Thread.sleep(1000);
+            lightingFixture.getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
+                Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.OFF));
+            });
+        }
         taskExecutor.shutdown();
         taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
 

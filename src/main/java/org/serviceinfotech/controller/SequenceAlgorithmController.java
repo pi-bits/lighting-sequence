@@ -7,7 +7,7 @@ import org.serviceinfotech.model.State;
 import java.util.List;
 
 public class SequenceAlgorithmController implements Controller {
-    private final LightingFixture fixture;
+    private LightingFixture fixture;
     public SequenceAlgorithmController(LightingFixture fixture) {
         this.fixture = fixture;
     }
@@ -21,10 +21,11 @@ public class SequenceAlgorithmController implements Controller {
             System.out.println("Light " + (i + 1) + "\t" + lightBulb.getColour().name() + "\t" + lightBulb.getState().name());
             try {
                 Thread.sleep(500);
+                lightBulb.setState(State.OFF);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            lightBulb.setState(State.OFF);
+
             System.out.println("Light " + (i + 1) + "\t" + lightBulb.getColour().name() + "\t" + lightBulb.getState().name());
         }
     }

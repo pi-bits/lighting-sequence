@@ -12,12 +12,15 @@ public class ColourAlgorithmController implements Controller {
 
     @Override
     public void run() {
+        //Iterate through all the available colours.
         for (int i = 0; i < Colour.values().length; i++) {
+            //Switch on Light on the fixture for a Color.
             fixture.switchLightsOnByColour(Colour.values()[i]);
             try {
+            //Keep it turned on for 30 seconds
                 Thread.sleep(1000);
+                //Keep it turned on for 30 seconds  and then switch off.
                 fixture.switchLightsOffByColour(Colour.values()[i]);
-                return;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
