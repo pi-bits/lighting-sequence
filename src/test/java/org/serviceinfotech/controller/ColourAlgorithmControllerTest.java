@@ -14,24 +14,25 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ColourAlgorithmControllerTest {
 
     public static final int NUMBER_OF_LIGHTS = 10;
-
+    LightingFixture lightingFixture;
     @Test
     public void shouldTurnOnGroupOfRedLightsForOneSecond() throws Exception {
-        LightingFixture lightingFixture = new LightingFixture(buildAlternativeLightBulbFixture(NUMBER_OF_LIGHTS));
+        lightingFixture = new LightingFixture(buildAlternativeLightBulbFixture(NUMBER_OF_LIGHTS));
         ColourAlgorithmController controller  = new ColourAlgorithmController(lightingFixture);
         ExecutorService taskExecutor = Executors.newFixedThreadPool(NUMBER_OF_LIGHTS);
         taskExecutor.submit(controller);
 
         for (int i = 0; i < Colour.values().length; i++) {
-            lightingFixture.getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
+            getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
                 Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.ON));
             });
             Thread.sleep(1000);
-            lightingFixture.getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
+            getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
                 Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.OFF));
             });
         }
@@ -71,4 +72,7 @@ public class ColourAlgorithmControllerTest {
         return lightBulbs;
     }
 
+    private List<LightBulb> getLightBulbsByColour(Colour colour) {
+        return lightingFixture.getLightBulbs().stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).collect(Collectors.toList());
+    }
 }

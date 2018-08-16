@@ -9,21 +9,22 @@ import org.serviceinfotech.model.State;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LightingFixtureTest {
     LightingFixture lightingFixture = new LightingFixture(buildAlternativeLightBulbFixture());
 
 
     @Test
-    public void shouldGetLightsOnByColour() throws Exception {
-        List<LightBulb> redLightBulbs = lightingFixture.getLightBulbsByColour(Colour.RED);
+    public void shouldGetLightBulbsByColour() throws Exception {
+        List<LightBulb> redLightBulbs = getLightBulbsByColour(Colour.RED);
         redLightBulbs.forEach(lightBulb -> Assert.assertThat(lightBulb.getColour(), Is.is(Colour.RED)));
 
     }
 
 
     @Test
-    public void shouldTurnLightsOnByColour() throws Exception {
+    public void shouldTurnOnLightBulbsByColour() throws Exception {
         lightingFixture.switchLightsOnByColour(Colour.RED);
         List<LightBulb> lightBulbs = lightingFixture.getLightBulbs();
         Assert.assertThat(lightBulbs.get(0).getState(), Is.is(State.ON));
@@ -33,7 +34,7 @@ public class LightingFixtureTest {
     }
 
     @Test
-    public void shouldTurnLightsOffByColour() throws Exception {
+    public void shouldTurnOffLightBulbsByColour() throws Exception {
         lightingFixture.switchLightsOffByColour(Colour.GREEN);
         List<LightBulb> lightBulbs = lightingFixture.getLightBulbs();
         Assert.assertThat(lightBulbs.get(1).getState(), Is.is(State.OFF));
@@ -56,6 +57,10 @@ public class LightingFixtureTest {
         lightBulbs.add(new LightBulb(Colour.RED));
         return lightBulbs;
 
+    }
+
+    private List<LightBulb> getLightBulbsByColour(Colour colour) {
+        return lightingFixture.getLightBulbs().stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).collect(Collectors.toList());
     }
 
 }

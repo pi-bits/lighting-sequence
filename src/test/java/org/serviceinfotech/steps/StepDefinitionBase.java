@@ -10,6 +10,7 @@ import org.serviceinfotech.model.State;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StepDefinitionBase {
 
@@ -68,12 +69,16 @@ public class StepDefinitionBase {
 
 
     protected void assertLightStatusByColour(Colour colour, State state) {
-        fixture.getLightBulbsByColour(colour).stream().forEach(lightBulb -> {
+        getLightBulbsByColour(colour).stream().forEach(lightBulb -> {
             Assert.assertThat(lightBulb.getColour().getColour() + " should be :" + state.name(), lightBulb.getState(), Is.is(state));
         });
     }
 
     protected void buildFixture(){
         fixture = new LightingFixture( buildAlternativeLighBulbFixture(20));
+    }
+
+    private List<LightBulb> getLightBulbsByColour(Colour colour) {
+        return fixture.getLightBulbs().stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).collect(Collectors.toList());
     }
 }

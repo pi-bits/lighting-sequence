@@ -5,7 +5,6 @@ import org.serviceinfotech.model.LightBulb;
 import org.serviceinfotech.model.State;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class LightingFixture {
@@ -19,7 +18,6 @@ public class LightingFixture {
     public List<LightBulb> getLightBulbs() {
         return lightBulbs;
     }
-
 
     public void switchLightsOnByColour(Colour colour) {
         toggleLightSwitch(colour, State.ON);
@@ -39,10 +37,6 @@ public class LightingFixture {
             }
         }
 
-    }
-
-    public List<LightBulb> getLightBulbsByColour(Colour colour) {
-        return lightBulbs.stream().filter(lightBulb -> lightBulb.getColour().equals(colour)).collect(Collectors.toList());
     }
 
     private static void printMessage(int lightNumber, LightBulb lightBulb) {
