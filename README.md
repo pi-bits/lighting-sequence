@@ -18,7 +18,8 @@ It should be easy to modify the program to support the following changes:
 • Add new controller algorithms.
 
 
-How to Build the JAR:
+***How to Build the JAR***
+
 1.Clone the project:
 git clone https://github.com/prashantdnaik/lighting-sequence.git
 
