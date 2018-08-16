@@ -2,7 +2,6 @@ package org.serviceinfotech.controller;
 
 import org.hamcrest.core.Is;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.serviceinfotech.fixture.LightingFixture;
 import org.serviceinfotech.model.Colour;
@@ -20,10 +19,11 @@ public class ColourAlgorithmControllerTest {
 
     public static final int NUMBER_OF_LIGHTS = 10;
     LightingFixture lightingFixture;
+
     @Test
     public void shouldTurnOnGroupOfRedLightsForOneSecond() throws Exception {
         lightingFixture = new LightingFixture(buildAlternativeLightBulbFixture(NUMBER_OF_LIGHTS));
-        ColourAlgorithmController controller  = new ColourAlgorithmController(lightingFixture);
+        ColourAlgorithmController controller = new ColourAlgorithmController(lightingFixture);
         ExecutorService taskExecutor = Executors.newFixedThreadPool(NUMBER_OF_LIGHTS);
         taskExecutor.submit(controller);
 
@@ -31,7 +31,7 @@ public class ColourAlgorithmControllerTest {
             getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
                 Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.ON));
             });
-            Thread.sleep(1000);
+            Thread.sleep(ColourAlgorithmController.COLOUR_SEQ_TIMER);
             getLightBulbsByColour(Colour.values()[i]).stream().forEach(lightBulb -> {
                 Assert.assertThat(lightBulb.getColour().getColour(), lightBulb.getState(), Is.is(State.OFF));
             });

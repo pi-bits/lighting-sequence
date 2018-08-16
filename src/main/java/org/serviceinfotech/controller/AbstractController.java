@@ -7,6 +7,8 @@ import org.serviceinfotech.model.State;
 
 import java.util.List;
 
+import static org.serviceinfotech.fixture.LightingFixture.printMessage;
+
 public abstract class AbstractController {
     private LightingFixture fixture;
 
@@ -14,26 +16,33 @@ public abstract class AbstractController {
         this.fixture = fixture;
     }
 
-    protected  void toggleLightOnOff() throws InterruptedException {
+    /**
+     * Switch ON/OFF lights in Ascending Order of the fixture length.
+     * @throws InterruptedException
+     * @param timer
+     */
+    protected  void toggleLightOnOff(long timer) throws InterruptedException {
         List<LightBulb> lightBulbs = this.fixture.getLightBulbs();
         for (int i = 0; i < lightBulbs.size(); i++) {
             LightBulb lightBulb = lightBulbs.get(i);
             lightBulb.setState(State.ON);
-            Thread.sleep(500);
+            printMessage(i, lightBulb);
+            Thread.sleep(timer);
             lightBulb.setState(State.OFF);
+            printMessage(i, lightBulb);
         }
     }
 
 
-
-    protected  void changeColours() throws InterruptedException {
-        //Iterate through all the available colours.
+    /**
+     * Switch ON/OFF a Group of lights of same colour in the fixture.
+     * @throws InterruptedException
+     * @param timer
+     */
+    protected  void changeColours(long timer) throws InterruptedException {
         for (int i = 0; i < Colour.values().length; i++) {
-            //Switch on Light on the fixture for a Color.
             fixture.switchLightsOnByColour(Colour.values()[i]);
-            //Keep it turned on for 30 seconds
-            Thread.sleep(1000);
-            //Keep it turned on for 30 seconds  and then switch off.
+            Thread.sleep(timer);
             fixture.switchLightsOffByColour(Colour.values()[i]);
         }
     }

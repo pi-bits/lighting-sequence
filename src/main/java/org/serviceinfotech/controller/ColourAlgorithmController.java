@@ -3,6 +3,7 @@ package org.serviceinfotech.controller;
 import org.serviceinfotech.fixture.LightingFixture;
 
 public class ColourAlgorithmController extends AbstractController implements Controller {
+    public static final long COLOUR_SEQ_TIMER = 1000L;
 
     public ColourAlgorithmController(LightingFixture fixture) {
         super(fixture);
@@ -11,7 +12,7 @@ public class ColourAlgorithmController extends AbstractController implements Con
     @Override
     public void run() {
         try {
-            changeColours();
+            changeColours(COLOUR_SEQ_TIMER);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

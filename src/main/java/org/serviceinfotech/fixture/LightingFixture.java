@@ -19,10 +19,18 @@ public class LightingFixture {
         return lightBulbs;
     }
 
+    /**
+     * Switches Light bulbs to ON State in the Lighting Fixture
+     * @param colour
+     */
     public void switchLightsOnByColour(Colour colour) {
         toggleLightSwitch(colour, State.ON);
     }
 
+    /**
+     * Switches Light bulbs to OFF State in the Lighting Fixture
+     * @param colour
+     */
     public void switchLightsOffByColour(Colour colour) {
         toggleLightSwitch(colour, State.OFF);
     }
@@ -39,7 +47,7 @@ public class LightingFixture {
 
     }
 
-    private static void printMessage(int lightNumber, LightBulb lightBulb) {
+    public static void printMessage(int lightNumber, LightBulb lightBulb) {
         System.out.println("Light " + (lightNumber + 1) + "\t" + lightBulb.getColour().name() + "\t" + lightBulb.getState().name());
     }
 }
