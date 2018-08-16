@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.hamcrest.core.Is;
-import org.junit.After;
 import org.junit.Assert;
 import org.serviceinfotech.controller.AlternateAlgorithmController;
 import org.serviceinfotech.controller.ColourAlgorithmController;
@@ -27,11 +26,16 @@ public class SequencingStepDefinition {
     Controller controller;
     LightingFixture fixture;
 
+
+    @cucumber.api.java.Before
+    public void beforeScenario(){
+        fixture = new LightingFixture( buildAlternativeLighBulbFixture(20));
+    }
+
     @Given("^I have (\\d+) lights in alternating colours of$")
     public void iHaveLightsInAlternatingColoursOf(int numberOfLights, DataTable dataTable) throws Throwable {
         List<String> lightColors = dataTable.asList(String.class);
-        List<LightBulb> lightBulbs = buildAlternativeLighBulbFixture(numberOfLights);
-        fixture = new LightingFixture(lightBulbs);
+
     }
 
 
@@ -45,8 +49,11 @@ public class SequencingStepDefinition {
                 controller = new ColourAlgorithmController(fixture);
                 break;
             case "Alternate":
-                controller = new AlternateAlgorithmController(fixture);
+                int timesToAlternate =2;
+                controller = new AlternateAlgorithmController(fixture,timesToAlternate);
                 break;
+             default:
+                 throw new IllegalArgumentException("Invalid Algorithm Sequence");
         }
 
 
@@ -57,21 +64,16 @@ public class SequencingStepDefinition {
     public void iSeeEachLightIsTurnedOnForSecondsThenOffInTurnFromFirstToLast(String waitTime) throws Throwable {
 
         ExecutorService taskExecutor = Executors.newSingleThreadExecutor();
-        taskExecutor.execute(controller);
+        taskExecutor.submit(controller);
 
-        fixture.getLightBulbs().forEach(lightBulb -> {
-            try {
-                Assert.assertThat(lightBulb.getState(), Is.is(State.ON));
-                Thread.sleep(500);
-                Assert.assertThat(lightBulb.getState(), Is.is(State.OFF));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        assertLightingSequence();
+
         taskExecutor.shutdown();
         taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
 
     }
+
+
 
     private List<LightBulb> buildAlternativeLighBulbFixture(int numberOfLights) {
         List<LightBulb> lightBulbs = new ArrayList<LightBulb>(numberOfLights);
@@ -108,22 +110,50 @@ public class SequencingStepDefinition {
     public void iSeeGroupOfLikeColouredLightsAreTurnedOnAndOffEverySeconds(int time) throws Throwable {
 
         ExecutorService taskExecutor = Executors.newSingleThreadExecutor();
-        taskExecutor.execute(controller);
+        taskExecutor.submit(controller);
 
-        for (int i = 0; i < Colour.values().length; i++) {
-            assertLightStatusByColour(Colour.values()[i], State.ON);
-            Thread.sleep(1000);
-            assertLightStatusByColour(Colour.values()[i], State.OFF);
-        }
+        assertColouringSequence();
 
         taskExecutor.shutdown();
         taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
     }
 
 
+
     @Then("^I see all algorithm running alternately$")
     public void iSeeAllAlgorithmRunningAlternately() throws Throwable {
+        ExecutorService taskExecutor = Executors.newSingleThreadExecutor();
+        taskExecutor.submit(controller);
+
+        assertLightingSequence();
+        assertColouringSequence();
+        assertLightingSequence();
+        assertColouringSequence();
+
+        taskExecutor.shutdown();
+        taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
     }
+
+    private void assertColouringSequence() throws InterruptedException {
+        for (int i = 0; i < Colour.values().length; i++) {
+            assertLightStatusByColour(Colour.values()[i], State.ON);
+            Thread.sleep(1000);
+            assertLightStatusByColour(Colour.values()[i], State.OFF);
+        }
+    }
+
+    private void assertLightingSequence() {
+        fixture.getLightBulbs().forEach(lightBulb -> {
+            try {
+                Assert.assertThat(lightBulb.getState(), Is.is(State.ON));
+                Thread.sleep(500);
+                Assert.assertThat(lightBulb.getState(), Is.is(State.OFF));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 
     private void assertLightStatusByColour(Colour colour, State state) {
         fixture.getLightBulbsByColour(colour).stream().forEach(lightBulb -> {

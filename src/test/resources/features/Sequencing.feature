@@ -1,4 +1,4 @@
-Feature: Fairy Lights Sequencing
+Feature: Fairy Lights Sequencing Lighting and Colouring
 Background: There are 20 fairy lights in alternating colours red, green and white that can be independently turned on and off. The controller is a java program that is given the name of a sequencing algorithm for turning the lights on and off. When launched, the program will execute the requested sequencing algorithm until it is terminated. As each light is turned on or off, the program should output the message 'Light <number> <colour> <on/off>', for example 'Light 1 red on'.
   Scenario: Sequence each light is turned on for half a second then off in turn from first to last
     Given I have 20 lights in alternating colours of
@@ -15,13 +15,6 @@ Background: There are 20 fairy lights in alternating colours red, green and whit
       | WHITE |
     When  I request Colour algorithm execution
     Then  I see Group of like coloured lights are turned on and off every 1 second
-@wip
-  Scenario: Alternate sequence algorithm every 30 seconds
-    Given I have 20 lights in alternating colours of
-      | RED   |
-      | GREEN |
-      | WHITE |
-    When  I request Alternate algorithm execution
-    Then  I see all algorithm running alternately
+
 
 
