@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LightingFixtureTest {
-    LightingFixture lightingFixture = new LightingFixture(buildAlternativeLightBulbFixture());
+    LightingFixture lightingFixture = new LightingFixtureBuilder(10,Colour.RED,Colour.GREEN,Colour.WHITE).build();
 
 
     @Test
@@ -29,7 +29,8 @@ public class LightingFixtureTest {
         List<LightBulb> lightBulbs = lightingFixture.getLightBulbs();
         Assert.assertThat(lightBulbs.get(0).getState(), Is.is(State.ON));
         Assert.assertThat(lightBulbs.get(3).getState(), Is.is(State.ON));
-        Assert.assertThat(lightBulbs.get(7).getState(), Is.is(State.ON));
+        Assert.assertThat(lightBulbs.get(7).getColour(), Is.is(Colour.GREEN));
+        Assert.assertThat(lightBulbs.get(7).getState(), Is.is(State.OFF));
 
     }
 
@@ -40,22 +41,8 @@ public class LightingFixtureTest {
         Assert.assertThat(lightBulbs.get(1).getState(), Is.is(State.OFF));
         Assert.assertThat(lightBulbs.get(4).getState(), Is.is(State.OFF));
         Assert.assertThat(lightBulbs.get(5).getState(), Is.is(State.OFF));
-
-    }
-
-    private List<LightBulb> buildAlternativeLightBulbFixture() {
-
-        List<LightBulb> lightBulbs = new ArrayList<LightBulb>(6);
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-        lightBulbs.add(new LightBulb(Colour.RED));
-        return lightBulbs;
+        Assert.assertThat(lightBulbs.get(3).getState(), Is.is(State.OFF));
+        Assert.assertThat(lightBulbs.get(3).getColour(), Is.is(Colour.RED));
 
     }
 

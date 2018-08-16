@@ -5,6 +5,7 @@ import org.serviceinfotech.controller.ColourAlgorithmController;
 import org.serviceinfotech.controller.Controller;
 import org.serviceinfotech.controller.SequenceAlgorithmController;
 import org.serviceinfotech.fixture.LightingFixture;
+import org.serviceinfotech.fixture.LightingFixtureBuilder;
 import org.serviceinfotech.model.Colour;
 import org.serviceinfotech.model.LightBulb;
 
@@ -27,8 +28,10 @@ public class Main {
         Scanner data = new Scanner(System.in);
         int programNumber = data.nextInt();
         System.out.println("You have choosen Program Number : " + programNumber);
+        System.out.println("Enter Number of Lights: ");
+        int numberOfLights = data.nextInt();
         Controller controller = null;
-        LightingFixture fixture = new LightingFixture(buildAlternativeLighBulbFixture(20));
+        LightingFixture fixture = new LightingFixtureBuilder(numberOfLights,Colour.RED,Colour.GREEN,Colour.WHITE).build();
         switch (programNumber) {
             case 1:
                 controller = new SequenceAlgorithmController(fixture);
@@ -52,34 +55,4 @@ public class Main {
 
     }
 
-    private static List<LightBulb> buildAlternativeLighBulbFixture(int numberOfLights) {
-        List<LightBulb> lightBulbs = new ArrayList<LightBulb>(numberOfLights);
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        return lightBulbs;
-    }
 }

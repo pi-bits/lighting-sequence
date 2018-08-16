@@ -1,9 +1,9 @@
 package org.serviceinfotech.model;
 
 public enum Colour {
-    RED("Red"),
-    GREEN("Green"),
-    WHITE("White");
+    RED("RED"),
+    GREEN("GREEN"),
+    WHITE("WHITE");
 
     private String colour;
     Colour(String colour) {

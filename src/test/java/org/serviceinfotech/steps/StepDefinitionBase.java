@@ -1,16 +1,13 @@
 package org.serviceinfotech.steps;
 
-import cucumber.api.java.Before;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
-import org.serviceinfotech.controller.ColourAlgorithmController;
-import org.serviceinfotech.controller.SequenceAlgorithmController;
 import org.serviceinfotech.fixture.LightingFixture;
+import org.serviceinfotech.fixture.LightingFixtureBuilder;
 import org.serviceinfotech.model.Colour;
 import org.serviceinfotech.model.LightBulb;
 import org.serviceinfotech.model.State;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,38 +16,11 @@ import static org.serviceinfotech.controller.SequenceAlgorithmController.LIGHTIN
 
 public class StepDefinitionBase {
 
-    LightingFixture fixture;
+    protected LightingFixture fixture;
+    protected Integer numberOfLights;
+    protected List<Colour> lightColors;
 
-    private List<LightBulb> buildAlternativeLighBulbFixture(int numberOfLights) {
-        List<LightBulb> lightBulbs = new ArrayList<LightBulb>(numberOfLights);
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
 
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        lightBulbs.add(new LightBulb(Colour.WHITE));
-
-        lightBulbs.add(new LightBulb(Colour.RED));
-        lightBulbs.add(new LightBulb(Colour.GREEN));
-        return lightBulbs;
-    }
 
     protected void assertColouringSequence() throws InterruptedException {
         for (int i = 0; i < Colour.values().length; i++) {
@@ -79,8 +49,9 @@ public class StepDefinitionBase {
         });
     }
 
-    protected void buildFixture(){
-        fixture = new LightingFixture( buildAlternativeLighBulbFixture(20));
+    protected void buildFixture() {
+        LightingFixtureBuilder lightingFixtureBuilder = new LightingFixtureBuilder(numberOfLights, lightColors.toArray(new Colour[lightColors.size()]));
+        this.fixture = lightingFixtureBuilder.build();
     }
 
     private List<LightBulb> getLightBulbsByColour(Colour colour) {

@@ -9,24 +9,21 @@ import org.serviceinfotech.controller.AlternateAlgorithmController;
 import org.serviceinfotech.controller.ColourAlgorithmController;
 import org.serviceinfotech.controller.Controller;
 import org.serviceinfotech.controller.SequenceAlgorithmController;
+import org.serviceinfotech.model.Colour;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SequencingStepDefinition extends StepDefinitionBase {
 
-    Controller controller;
-
-    @Before
-    public void beforeScenario(){
-       buildFixture();
-    }
+    private Controller controller;
 
     @Given("^I have (\\d+) lights in alternating colours of$")
     public void iHaveLightsInAlternatingColoursOf(int numberOfLights, DataTable dataTable) throws Throwable {
-        List<String> lightColors = dataTable.asList(String.class);
+        this.lightColors = dataTable.asList(Colour.class);
+        this.numberOfLights = numberOfLights;
+        buildFixture();
 
     }
 
@@ -40,11 +37,11 @@ public class SequencingStepDefinition extends StepDefinitionBase {
                 controller = new ColourAlgorithmController(fixture);
                 break;
             case "Alternate":
-                int timesToAlternate =2;
-                controller = new AlternateAlgorithmController(fixture,timesToAlternate);
+                int timesToAlternate = 2;
+                controller = new AlternateAlgorithmController(fixture, timesToAlternate);
                 break;
-             default:
-                 throw new IllegalArgumentException("Invalid Algorithm Sequence");
+            default:
+                throw new IllegalArgumentException("Invalid Algorithm Sequence");
         }
 
 
@@ -65,9 +62,6 @@ public class SequencingStepDefinition extends StepDefinitionBase {
     }
 
 
-
-
-
     @Then("^I see Group of like coloured lights are turned on and off every (\\d+) second$")
     public void iSeeGroupOfLikeColouredLightsAreTurnedOnAndOffEverySeconds(int time) throws Throwable {
 
@@ -79,7 +73,6 @@ public class SequencingStepDefinition extends StepDefinitionBase {
         taskExecutor.shutdown();
         taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
     }
-
 
 
     @Then("^I see all algorithm running alternately$")

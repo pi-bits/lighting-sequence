@@ -17,7 +17,7 @@ public abstract class AbstractController {
     }
 
     /**
-     * Switch ON/OFF lights in Ascending Order of the fixture length.
+     * Switch ON/OFF lights in Order of the fixture length from first to last.
      * @throws InterruptedException
      * @param timer
      */
