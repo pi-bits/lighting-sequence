@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MainClazz {
+public class Main {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("=============================");
         System.out.println("*********FAIRY LIGHTS******** ");
